@@ -618,4 +618,46 @@ L'oggetto `request` ha più proprietà di quello nativo di NODE.
 
 In particolare, `request.headers` ha una serie di scorciatoie.
 
+Ad esempio:
+
+- `request.secure` verifica se il protocollo è HTTPS
+- `request.protocol` restituisce il protocollo HTTP
+- `request.path` restituisce il path dell'URL
+- `request.ip` restituisce l'IP della richiesta
+
+#### L'oggetto risposta
+
+L'oggetto `response` è il secondo argomento nel callback *handler* della route di EXPRESS
+
+Ha dei metodi aggiuntivi rispetto a quelli classici di `http` (statusCode, writeHead, end, write)
+
+Elenco dei metodi aggiuntivi:
+
+- `response.redirect(url)`: redirect request
+- `response.send(data)`: send response
+- `response.json(data)`: send JSON and force proper headers
+- `response.sendfile(path, options, callback)`: send a file
+- `response.render(templateName, locals, callback)`: render a template
+- `response.locals`: pass data to template
+- `response.status`: specifica il codice di stato HTTP della risposta
+
+##### Inviare una risposta
+
+```javascript
+app.get('/', (req, res) => {
+	res.send('Ciao a tutti!')
+})
+```
+Si tratta di una risposta basica, il cui contenuto è una stringa.
+
+In questo caso il content-type è gestito automaticamente da EXPRESS in funzione del contenuto della risposta (che in questo caso, essendo una stringa, sarà `text/plain`)
+
+Si può pre-impostare il content-type utilizzando `response.set('Content-Type','text/plain')`.
+
+Per inviare una risposta vuota (tipicamente a fronte di un errore) si può utilizzare:
+
+`response.status(404).end()`
+
+
+
 
