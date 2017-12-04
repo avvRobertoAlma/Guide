@@ -675,7 +675,48 @@ In presenza di più parametri es. GET /users/1234/invoices/012017, si potrà acc
 
 EXPRESS ha un proprio parser delle query. Si può accedere alle query mediante ``req.query.name``, dove ``name`` è la chiave del valore in una stringa di ricerca.
 
-Esempio, un URL del tipo http://www.iusinaction.com/search?term=cassazione ha una query composta da una key (term) e un valore (cassazione).
+Esempio, un URL del tipo ``http://www.iusinaction.com/search?term=cassazione`` ha una query composta da una key (term) e un valore (cassazione).
 Posso accedere al valore (cassazione) con ``req.query.term``.
 
+## MongoDB e Mongoose
 
+Mongoose è una libreria ODM (*Object Document Mapping*) per Node.js e MongoDB.
+
+Si crea un'astrazione dal Database e l'applicazione interagisce solo con gli oggetti e i loro metodi.
+
+### Installazione
+
+``npm install mongoose``
+
+Per accedere alla libreria, utilizzare:
+
+``const mongoose = require('mongoose');``
+
+Per la connessione al database, utilizzare il metodo ``.connect``
+
+```javascript
+mongoose.connect('mongodb://localhost:27017/test')
+```
+### Schema
+
+Uno Schema di Mongoose è un oggetto che contiene informazioni sulle proprietà di un documento e su eventuali regole di validazione.
+
+Gli Schema rappresentano una sorta di *scheletro* di un oggetto del database.
+
+Ad esempio:
+```javascript
+import mongoose, { Schema } from 'mongoose'
+
+const personSchema = new Schema({
+	name: {
+		type: String
+	},
+	surname: {
+		type: String
+	},
+	age: {
+		type: Number
+	}
+})
+
+```
