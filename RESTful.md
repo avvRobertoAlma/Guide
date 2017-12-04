@@ -673,3 +673,9 @@ In presenza di più parametri es. GET /users/1234/invoices/012017, si potrà acc
 
 ##### Accedere alle query
 
+EXPRESS ha un proprio parser delle query. Si può accedere alle query mediante ``req.query.name``, dove ``name`` è la chiave del valore in una stringa di ricerca.
+
+Esempio, un URL del tipo http://www.iusinaction.com/search?term=cassazione ha una query composta da una key (term) e un valore (cassazione).
+Posso accedere al valore (cassazione) con ``req.query.term``.
+
+
