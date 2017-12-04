@@ -658,6 +658,18 @@ Per inviare una risposta vuota (tipicamente a fronte di un errore) si può utili
 
 `response.status(404).end()`
 
+##### Accedere ai parametri dell'URL
 
+Per accedere ai parametri dell'URL si utilizza ``req.params``.
+Ad esempio, dato un url del seguente tenore: GET /users/1234 per accedere a quell'*1234* sarà necessario:
 
+1. gestire l'URI con la seguente sintassi ``app.get('/users/:id')``
+2. accedere all'id utilizzando ``req.params.id``.
+
+In presenza di più parametri es. GET /users/1234/invoices/012017, si potrà accedere a id utente e id fattura utilizzando la seguente sintassi:
+
+1. ``app.get('/users/:id/invoices/:idInvoice')``
+2. accedere ai valori di interesse con ``req.params.id`` e ``req.params.idInvoice``.
+
+##### Accedere alle query
 
