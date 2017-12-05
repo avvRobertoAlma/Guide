@@ -720,3 +720,30 @@ const personSchema = new Schema({
 })
 
 ```
+Negli Schema si possono inserire le seguenti tipologie di dati:
+
+- ``String``: una sequenza di caratteri;
+- ``Number``: un numero fino a 253;
+- ``Array``: un array di dati;
+- ``Boolean``: un valore *true* o *false*;
+- ``Buffer``: un file binario di Node.js (es. PDF, Immagini ecc.);
+- ``Date``: una data espressa in formato ISO es. 2017-11-25T18:23:23.009Z;
+- ``Schema.Types.ObjectId``: una stringa esadecimale tipica di MongoDB (es. 52dafa354bd71b30fa12c441);
+- ``Schema.Types.Mixed``: qualsiasi tipo di dato;
+
+> In particolare ``ObjectId`` viene inserito automaticamente come ``_id`` univoco di un oggetto del DB, se non ne viene inserito uno con il metodo ``save``.
+
+Nello Schema, si possono inserire anche dei metodi setter e getter. Ad esempio:
+
+```javascript
+const articleSchema = new mongoose.Schema({
+	slug: {
+		type: String,
+		set: function(slug){
+			return slug.toLowerCase();
+			}
+	}
+})
+```
+In questo caso, al momento del salvataggio la stringa inserita viene convertita in caratteri minuscoli.
+
