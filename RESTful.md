@@ -747,3 +747,47 @@ const articleSchema = new mongoose.Schema({
 ```
 In questo caso, al momento del salvataggio la stringa inserita viene convertita in caratteri minuscoli.
 
+### Model
+
+Per compilare uno Schema in un modello, si utilizza ``mongoose.model([name of model], [Schema]``
+
+es. ``let Article = mongoose.model('Article', articleSchema)``
+
+I modelli sono utilizzati per creare documenti di Mongoose. 
+
+Ad esempio per creare un nuovo articolo, utilizziamo la seguente sintassi:
+
+``let icoArticle = new Article({title: 'How to launch an Ico'})``
+
+#### metodi dei Modelli di Mongoose
+
+- ``Model.create(data, [callback (error, doc)])`` crea un nuovo documento di Mongoose e lo salva nel database;
+- ``Model.remove(query, [callback(error)]`` rimuove il documento che soddisfa la query;
+- ``Model.find(query,[fields],[options], [callback(error)]`` trova i documenti che soddisfano le query (si possono selezionare i campi specifici e utilizzare opzioni);
+- ``Model.update(query,update,[options], [callback(error)]`` aggiorna documenti Mongoose;
+- ``Model.populate(docs, options, [callback(error, doc)])`` popola documenti utilizzando referenze ad altre *collections*;
+- ``Model.findOne(query,[fields],[options], [callback(error, doc)]`` trova il primo documento che soddisfa la query;
+- ``Model.findById(id, [fields], [options], [callback(error, doc)])``: trova il primo documento il cui _id coincide con l'id desiderato;
+
+Altri metodi sono disponibili sulla documentazione ufficiale di [Mongoose](http://mongoosejs.com/docs/api.html#model-js)
+
+#### metodi personalizzati
+
+Con Mongoose è possibile aggiungere metodi personalizzati.
+
+Prima occorre definire il metodo personalizzato es. **buy()**.
+
+```javascript
+articleSchema.method({
+	buy: function(quantity, customer, callback) {
+		var articleToPurchase = this
+		// creare un ordine di acquisto e inviare una fattura al cliente
+		return callback(results)
+	}
+});
+```
+A questo punto si potrà utilizzare il metodo ``buy()``.
+
+> I metodi personalizzati devono essere definiti prima che sia compilato il modello.
+
+
