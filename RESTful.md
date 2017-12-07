@@ -873,3 +873,35 @@ Il metodo ``populate()`` può essere invocato con alcuni argomenti, in particola
 - ``select`` ossia un valore per selezionare solo alcuni campi (es. solo il titolo e non altri campi);
 
 > N.B. il metodo populate opera anche con il metodo ``.find()`` e non solo con ``.findOne()``
+
+## Creare un'API REST con un generator
+
+Esistono svariati tool per semplificare e velocizzare il processo di creazione di un'API Rest.
+
+Uno dei più diffusi è [generator-rest](https://github.com/diegohaz/rest) di DiegoHaz. 
+
+### Installazione
+
+Prima di tutto, occorre installare [Yeoman](http://yeoman.io/) e successivamente installare il pacchetto 'generator-rest'
+
+```javascript
+npm install -g yo
+npm install -g generator-rest
+```
+Installando il pacchetto globalmente, avremo a disposizione i comandi ``yo rest`` da riga di comando per generare i progetti.
+
+### Creare un progetto
+
+Creare un progetto è semplice:
+
+``yo rest`` crea un nuovo progetto nella cartella corrente
+``yo rest:api`` crea un nuovo endpoint
+
+Successivamente, è sufficiente rispondere alle domande presentate dal sistema per generare le nuove API (ed eventualmente il modello di mongoose)
+
+### Avviare il progetto
+
+1. assicurarsi che MongoDB sia installato ed attivo in un'altra istanza di terminale
+2. digitare ``npm run dev`` per avviare il server in modalità sviluppo
+3. accedere agli endpoint accedendo al seguente indirizzo ``http://localhost:3000/api/[endpoint]``
+
