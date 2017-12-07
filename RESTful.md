@@ -790,4 +790,86 @@ A questo punto si potrà utilizzare il metodo ``buy()``.
 
 > I metodi personalizzati devono essere definiti prima che sia compilato il modello.
 
+### Documenti collegati
 
+In un database NOSQL (ossia non relazionale) si pone l'esigenza di gestire degli insieme di dati che potrebbero essere collegati da una relazione.
+
+Ad esempio, si pensi agli ``users`` e ai ``posts``. Teoricamente ogni ``user`` potrebbe aver scritto un certo quantitativo di ``posts``.
+Da un punto di vista strutturale ogni ``post`` potrebbe avere, quantomeno, un ``title`` e un ``text``.
+
+Una soluzione può essere quella di prevedere nello Schema degli ``users`` uno specifico campo ``posts`` che, a sua volta, potrebbe essere definito in due diverse modalità:
+
+1. come un campo di tipo ``Schema.Types.Mixed``;
+2. come un subSchema distinto (ed è l'approccio preferibile).
+
+Si potrebbe avere, quindi,
+
+```javascript
+var postSchema = new mongoose.Schema({
+  title: String,
+  text: String
+})
+//attach methods, hooks, etc., to post schema
+var userSchema = new mongoose.Schema({
+  name: String,
+  posts: [postSchema]
+})
+//attach methods, hooks, etc., to user schema
+var User = mongoose.model('User', userSchema)
+```
+Per salvare i post in un utente esistente, si può utilizzare l'operatore ``$push`` di MongoDB, come nell'esempio seguente:
+
+```javascript
+User.update(
+  {_id: userId}, 
+  {$push: {posts: newPost}}, 
+  function(error, results) {
+    //handle error and check results
+  })
+```
+In questo caso si aggiunge all'array ``posts`` il nuovo elemento ``newPost`` (ossia una variabile che sarà stata definita in altra sezione)
+
+#### Creare relazioni tra collections
+
+Mongoose ha una caratteristica denominata ``population`` che consente di riempire alcune parti di un documento con elementi di una differente collection.
+
+Si torni all'esempio dei ``posts`` e degli ``users``.
+
+```javascript
+const mongoose = require('mongoose'),
+  Schema = mongoose.Schema
+  
+const userSchema = Schema({
+  _id     : Number,
+  name: String,
+  posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }]
+};
+
+const postSchema = Schema({
+  _creator: { type: Number, ref: 'User' },
+  title: String,
+  text: String
+})
+
+let Post  = mongoose.model('Post', postSchema)
+let User = mongoose.model('User', userSchema)
+
+User.findOne({ name: /azat/i })
+  .populate('posts')
+  .exec(function (err, user) {
+    if (err) return handleError(err)
+    console.log('The user has % post(s)', user.posts.length)
+  })
+```
+In questo caso, lo Schema userSchema ha un campo ``posts`` che viene popolato con il riferimento al modello 'Posts' (precisamente è un insieme di ``ObjectId`` (ossia l'id di ogni post).
+Analogamente lo Schema postSchema ha un campo ``_creator`` che viene popolato con il riferimento al modello 'User'.
+
+Quando si esegue la query, una volta che viene individuato l'Utente, si invoca il metodo ``populate('posts')`` in modo che sia riempito il campo ``posts``.
+
+Il metodo ``populate()`` può essere invocato con alcuni argomenti, in particolare:
+
+- ``path`` ossia il riferimento al campo da riempire;
+- ``options`` ossia un oggetto che può contenere ``limit`` (numero massimo di elementi da restituire) e ``sort`` (ordinare per un determinato campo);
+- ``select`` ossia un valore per selezionare solo alcuni campi (es. solo il titolo e non altri campi);
+
+> N.B. il metodo populate opera anche con il metodo ``.find()`` e non solo con ``.findOne()``
