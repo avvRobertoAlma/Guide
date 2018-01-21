@@ -70,3 +70,34 @@ Nginx invia le richieste a ``/utils`` mentre le app Express le gestiscono a part
 
 ## Nginx come reverse proxy in caso di più domini collegati ad un unico indirizzo IP
 
+1. Inserire due ``server`` nel file di configurazione di ``nginx``, ciascuno in ascolto sulla medesima porta.
+2. Entrambi i ``server`` avranno al loro interno una unica ``location``;
+3. la sola differenza sarà nel ``proxy_pass``, dato che il primo ``server`` indirizza a un indirizzo IP, il secondo ad un altro indirizzo IP.
+
+```javascript
+server {
+    listen 80;
+    server_name domain.com;
+    location / {
+        proxy_pass http://localhost:4000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+     }
+}
+server {
+    listen 80;
+    server_name domain2.com;
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+     }
+}
+```
+
